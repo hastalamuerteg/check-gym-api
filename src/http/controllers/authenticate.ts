@@ -22,16 +22,14 @@ export async function authenticate(
       password,
     })
 
-    // const token = await reply.jwtSign(
-    //   {
-    //     role: user.role,
-    //   },
-    //   {
-    //     sign: {
-    //       sub: user.id,
-    //     },
-    //   },
-    // )
+    const token = await reply.jwtSign(
+      {},
+      {
+        sign: {
+          sub: user.id,
+        },
+      },
+    )
 
     // const refreshToken = await reply.jwtSign(
     //   {
@@ -46,7 +44,11 @@ export async function authenticate(
     // )
 
     return reply.send({
-      user,
+      user: {
+        ...user,
+        password_hash: undefined,
+      },
+      token,
     })
   } catch (err) {
     if (err instanceof InvalidCredentialsError) {
